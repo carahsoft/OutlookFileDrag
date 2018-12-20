@@ -17,8 +17,7 @@ namespace OutlookFileDrag
             {
                 //Hook OLE drag and drop event
                 log.Info("Creating hook for DoDragDrop method of ole32.dll");
-                hook = EasyHook.LocalHook.Create(EasyHook.LocalHook.GetProcAddress("ole32.dll", "DoDragDrop"),
-                    new NativeMethods.DragDropDelegate(DragDropHook.DoDragDropHook), null);
+                hook = EasyHook.LocalHook.Create(EasyHook.LocalHook.GetProcAddress("ole32.dll", "DoDragDrop"), new NativeMethods.DragDropDelegate(DragDropHook.DoDragDropHook), null);
             }
             catch (Exception ex)
             {
@@ -90,7 +89,7 @@ namespace OutlookFileDrag
                 log.InfoFormat("Files: {0}", string.Join(",", DataObjectHelper.GetFilenames(pDataObj)));
 
                 NativeMethods.IDataObject newDataObj = new OutlookDataObject(pDataObj);
-                int result = NativeMethods.DoDragDrop(newDataObj, pDropSource, dwOKEffects, out pdwEffect);
+                int result = NativeMethods.DoDragDrop(newDataObj, pDropSource, NativeMethods.DROPEFFECT_COPY, out pdwEffect);
 
                 //Get result
                 log.InfoFormat("DoDragDrop result: {0}", result);
